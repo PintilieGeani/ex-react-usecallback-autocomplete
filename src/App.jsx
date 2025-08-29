@@ -24,6 +24,8 @@ function App() {
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(false)
+  const [dettaglio, setDettaglio] = useState({})
+  const [show, setShow] = useState(false)
 
   const eseguiFetch = debounce((query) => {
     console.log("eseguo la query:", query)
@@ -41,9 +43,19 @@ function App() {
 
   useEffect(() => {
     eseguiFetchCallBack(query)
+    setShow(false)
   }, [query, eseguiFetchCallBack])
 
-  
+  const handleClick = (elem) => {
+    console.log("dentro la funzione handle")
+    console.log(elem)
+    setShow(true)
+    return (setDettaglio(elem))
+  }
+
+  console.log(dettaglio)
+
+
   return (
     <>
       <div className="inpaginazione">
@@ -56,10 +68,19 @@ function App() {
         </div>
         {query.length > 0 && <div className="card-container">
           <div className="card">
-            {products.map((cur) => (
-              <p>{cur.name}</p>
+            {products.map((cur, i) => (
+              <p
+                key={i}
+                onClick={() => handleClick(cur)}
+              >{cur.name}</p>
             ))}
           </div>
+          {show && <div className="dettaglio">
+            <p>Nome: {dettaglio.name}</p>
+            <p>Colore: {dettaglio.color} </p>
+            <p>Brand:{dettaglio.brand} </p>
+          </div>}
+
         </div>}
 
       </div>
